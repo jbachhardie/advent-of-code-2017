@@ -74,8 +74,9 @@ let make = (~message, _children) => {
         <br/>
         <label>
           (ReasonReact.stringToElement("Input: "))
-          <input
-            _type="text"
+          <textarea
+            rows=20
+            cols=120
             value=self.state.input
             onChange=(
               self.reduce(
@@ -85,6 +86,7 @@ let make = (~message, _children) => {
             )
           />
         </label>
+        <br/>
         <input _type="submit" value="Go!"/>
         <h3> (ReasonReact.stringToElement("Output")) </h3>
         <p> (ReasonReact.stringToElement(self.state.output)) </p>
