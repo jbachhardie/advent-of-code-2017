@@ -17,6 +17,7 @@ let puzzleFnTable = {
   let table = Hashtbl.create(50);
   Hashtbl.add(table, "InverseCaptcha", InverseCaptcha.calculate(~bigStep=false));
   Hashtbl.add(table, "InverseCaptcha2", InverseCaptcha.calculate(~bigStep=true));
+  Hashtbl.add(table, "Spreadsheet", Spreadsheet.calculate);
   table
 };
 
@@ -68,6 +69,9 @@ let make = (~message, _children) => {
             </option>
             <option value="InverseCaptcha2">
               (ReasonReact.stringToElement("1.2 Inverse Captcha big Step"))
+            </option>
+            <option value="Spreadsheet">
+              (ReasonReact.stringToElement("2.1 Spreadsheet Checksum"))
             </option>
           </select>
         </label>
