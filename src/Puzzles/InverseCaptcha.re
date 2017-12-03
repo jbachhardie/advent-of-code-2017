@@ -7,21 +7,23 @@ let char_to_int = (c: char) => {
   }
 };
 
-let execute = (~bigStep=false, input: string) => {
-  let length = String.length(input);
-  let step = bigStep ? length / 2 : 1;
-  let rec circular_index_to_linear = (i) => i < 0 ? circular_index_to_linear(length + i) : i;
-  let rec sum_if_matches = (i, sum) =>
-    if (i < length) {
-      let prevIndex = circular_index_to_linear(i - step);
-      let current = input.[i] |> char_to_int;
-      let prev = input.[prevIndex] |> char_to_int;
-      sum_if_matches(i + 1, current == prev ? sum + current : sum)
-    } else {
-      sum
-    };
-  switch (sum_if_matches(0, 0)) {
-  | value => Js.Int.toString(value)
+let string_to_int_list = (s) => {
+  let rec reduce = (i, acc) => i < 0 ? acc : reduce(i - 1, [char_to_int(s.[i]), ...acc]);
+  reduce(String.length(s) - 1, [])
+};
+
+let circular_matching_sum = (l, step) => {
+  let rec circular_index_to_linear = (i) => i < 0 ? circular_index_to_linear(List.length(l) + i) : i;  
+  let get_prev = (i) => List.nth(l, circular_index_to_linear(i - step));
+  let sum = ref(0);
+  List.iteri((i, current) => current == get_prev(i) ? sum := sum^ + current : (),l);
+  sum^
+};
+
+let calculate = (~bigStep=false, input: string) => {
+  let step = bigStep ? String.length(input) / 2 : 1;
+  switch (string_to_int_list(input)) {
+  | integer_list => circular_matching_sum(integer_list, step) |> Js.Int.toString
   | exception (Failure("char_to_int")) => "ERROR: Invalid input"
   }
 };

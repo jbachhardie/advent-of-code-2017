@@ -15,8 +15,8 @@ type state = {
 
 let puzzleFnTable = {
   let table = Hashtbl.create(50);
-  Hashtbl.add(table, "InverseCaptcha", InverseCaptcha.execute(~bigStep=false));
-  Hashtbl.add(table, "InverseCaptcha2", InverseCaptcha.execute(~bigStep=true));
+  Hashtbl.add(table, "InverseCaptcha", InverseCaptcha.calculate(~bigStep=false));
+  Hashtbl.add(table, "InverseCaptcha2", InverseCaptcha.calculate(~bigStep=true));
   table
 };
 
