@@ -19,6 +19,7 @@ let puzzleFnTable = {
   Hashtbl.add(table, "InverseCaptcha2", InverseCaptcha.calculate(~bigStep=true));
   Hashtbl.add(table, "Spreadsheet", Spreadsheet.run(Spreadsheet.differenceBetweenMaxAndMin));
   Hashtbl.add(table, "SpreadsheetDivision", Spreadsheet.run(Spreadsheet.wholeDivisionOrZero));
+  Hashtbl.add(table, "SpiralManhattan", Spiral.run(Spiral.manhattanDistance));
   table;
 };
 
@@ -76,6 +77,9 @@ let make = (~message, _children) => {
             </option>
             <option value="SpreadsheetDivision">
               (ReasonReact.stringToElement("2.2 Spreadsheet Whole Division Checksum"))
+            </option>
+            <option value="SpiralManhattan">
+              (ReasonReact.stringToElement("3.1 Spiral Manhattan Distance"))
             </option>
           </select>
         </label>

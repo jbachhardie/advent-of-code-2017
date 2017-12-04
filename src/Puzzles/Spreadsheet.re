@@ -2,9 +2,7 @@ let parseTSV = (tsv) =>
   Js.String.split("\n", tsv)
   |> Array.map(
        (row) =>
-         String.trim(row)
-         |> Js.String.splitByRe([%re "/[\t ]+/"])
-         |> Array.map((number) => Int32.of_string(number) |> Int32.to_int)
+         String.trim(row) |> Js.String.splitByRe([%re "/[\t ]+/"]) |> Array.map(int_of_string)
      );
 
 let differenceBetweenMaxAndMin = (row) => {
