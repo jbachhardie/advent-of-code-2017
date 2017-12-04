@@ -4,6 +4,13 @@ type direction =
   | Up
   | Down;
 
+type vector = {
+  mutable x: int,
+  mutable y: int
+};
+
+let vec = (x, y) => {x, y};
+
 let rotateCounterClockwise = (direction) =>
   switch direction {
   | Left => Down
@@ -12,35 +19,53 @@ let rotateCounterClockwise = (direction) =>
   | Down => Right
   };
 
-let spiralToCartesian = (spiralIndex) => {
-  let x = ref(-1);
-  let y = ref(0);
-  let direction = ref(Right);
-  let steps = ref(-1);
-  let stepLimit = ref(1);
-  for (_ in 1 to spiralIndex) {
-    switch direction^ {
-    | Right => x := x^ + 1
-    | Left => x := x^ - 1
-    | Up => y := y^ + 1
-    | Down => y := y^ - 1
+let stepInDirectionVector = (direction) =>
+  switch direction {
+  | Right => vec(1, 0)
+  | Left => vec(-1, 0)
+  | Up => vec(0, 1)
+  | Down => vec(0, -1)
   };
-  steps := steps^ + 1;
-  if (steps^ == stepLimit^) {
-    direction := rotateCounterClockwise(direction^);
-    steps := 0;
-    if (direction^ == Left || direction^ == Right) {
-      stepLimit := stepLimit^ + 1;
-    };
-  };
-  };
-  (x^, y^);
+
+let vectorSum = (a, b) => {
+  a.x = a.x + b.x;
+  a.y = a.y + b.y;
 };
 
-let cartesianManhattanDistance = ((p1, p2), (q1, q2)) => abs(p1 - q1) + abs(p2 - q2);
+let takeStep = (stepCount, stepLimit, direction) =>
+  switch (stepCount == stepLimit, direction) {
+  | (false, _) => (stepCount + 1, stepLimit, direction)
+  | (true, Up)
+  | (true, Down) => (0, stepLimit + 1, rotateCounterClockwise(direction))
+  | (true, _) => (0, stepLimit, rotateCounterClockwise(direction))
+  };
 
-let manhattanDistance = (spiralIndex) =>
-  spiralIndex |> spiralToCartesian |> cartesianManhattanDistance((0, 0));
+let turtle = (lay, max) => {
+  let coords = vec(100, 100);
+  let plane = Array.make_matrix(201, 201, 0);
+  let direction = ref(Right);
+  let stepCount = ref(0);
+  let stepLimit = ref(0);
+  let prev = ref(0);
+  while (prev^ < max) {
+    let newValue = lay(plane, coords, prev^);
+    plane[coords.x][coords.y] = newValue;
+    prev := newValue;
+    vectorSum(coords, stepInDirectionVector(direction^));
+    let (newStepCount, newStepLimit, newDirection) = takeStep(stepCount^, stepLimit^, direction^);
+    stepCount := newStepCount;
+    stepLimit := newStepLimit;
+    direction := newDirection;
+  };
+  coords;
+};
+
+let cartesianManhattanDistance = (a, b) => abs(a.x - b.x) + abs(a.y - b.y);
+
+let manhattanDistance = (max) =>
+  (max - 1)
+  |> turtle((_, _, prev) => prev + 1)
+  |> cartesianManhattanDistance(vec(100, 100));
 
 let run = (fn, input) =>
   switch (input |> int_of_string) {
