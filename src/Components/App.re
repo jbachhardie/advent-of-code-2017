@@ -17,8 +17,9 @@ let puzzleFnTable = {
   let table = Hashtbl.create(50);
   Hashtbl.add(table, "InverseCaptcha", InverseCaptcha.calculate(~bigStep=false));
   Hashtbl.add(table, "InverseCaptcha2", InverseCaptcha.calculate(~bigStep=true));
-  Hashtbl.add(table, "Spreadsheet", Spreadsheet.calculate);
-  table
+  Hashtbl.add(table, "Spreadsheet", Spreadsheet.run(Spreadsheet.differenceBetweenMaxAndMin));
+  Hashtbl.add(table, "SpreadsheetDivision", Spreadsheet.run(Spreadsheet.wholeDivisionOrZero));
+  table;
 };
 
 let component = ReasonReact.reducerComponent("App");
@@ -36,7 +37,7 @@ let make = (~message, _children) => {
         | fn => fn(state.input)
         | exception Not_found => "ERROR: Function not found!"
         };
-      ReasonReact.Update({...state, output})
+      ReasonReact.Update({...state, output});
     },
   render: (self) =>
     <div className="App">
@@ -50,7 +51,7 @@ let make = (~message, _children) => {
           self.reduce(
             (event) => {
               ReactEventRe.Form.preventDefault(event);
-              Submit
+              Submit;
             }
           )
         )>
@@ -73,9 +74,12 @@ let make = (~message, _children) => {
             <option value="Spreadsheet">
               (ReasonReact.stringToElement("2.1 Spreadsheet Checksum"))
             </option>
+            <option value="SpreadsheetDivision">
+              (ReasonReact.stringToElement("2.2 Spreadsheet Whole Division Checksum"))
+            </option>
           </select>
         </label>
-        <br/>
+        <br />
         <label>
           (ReasonReact.stringToElement("Input: "))
           <textarea
@@ -90,8 +94,8 @@ let make = (~message, _children) => {
             )
           />
         </label>
-        <br/>
-        <input _type="submit" value="Go!"/>
+        <br />
+        <input _type="submit" value="Go!" />
         <h3> (ReasonReact.stringToElement("Output")) </h3>
         <p> (ReasonReact.stringToElement(self.state.output)) </p>
       </form>
