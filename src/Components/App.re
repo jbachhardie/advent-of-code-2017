@@ -20,6 +20,7 @@ let puzzleFnTable = {
   Hashtbl.add(table, "Spreadsheet", Spreadsheet.run(Spreadsheet.differenceBetweenMaxAndMin));
   Hashtbl.add(table, "SpreadsheetDivision", Spreadsheet.run(Spreadsheet.wholeDivisionOrZero));
   Hashtbl.add(table, "SpiralManhattan", Spiral.run(Spiral.manhattanDistance));
+  Hashtbl.add(table, "SpiralAdjacentSum", Spiral.run(Spiral.maxSurroundingSum));
   table;
 };
 
@@ -80,6 +81,9 @@ let make = (~message, _children) => {
             </option>
             <option value="SpiralManhattan">
               (ReasonReact.stringToElement("3.1 Spiral Manhattan Distance"))
+            </option>
+            <option value="SpiralAdjacentSum">
+              (ReasonReact.stringToElement("3.2 Spiral Adjacent Sum"))
             </option>
           </select>
         </label>

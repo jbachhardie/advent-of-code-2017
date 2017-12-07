@@ -49,7 +49,7 @@ let turtle = (layFn, max) => {
     newVal;
   };
   let rec takeStep = (stepCount, stepLimit, direction) =>
-    if (lay() < max) {
+    if (lay() <= max) {
       vectorSum(coords, stepInDirectionVector(direction));
       switch (stepCount == stepLimit, direction) {
       | (false, _) => takeStep(stepCount + 1, stepLimit, direction)
@@ -65,7 +65,7 @@ let turtle = (layFn, max) => {
 
 let cartesianManhattanDistance = (a, b) => abs(a.x - b.x) + abs(a.y - b.y);
 
-let manhattanDistance = (max) => {
+let manhattanDistance = (limit) => {
   let i = ref(0);
   let (finalCoords, _finalState) =
     turtle(
@@ -73,13 +73,28 @@ let manhattanDistance = (max) => {
         i := i^ + 1;
         i^;
       },
-      max
+      limit - 1
     );
   cartesianManhattanDistance(vec(100, 100), finalCoords);
 };
 
-let maxSurroundingSum = (max) => {
-  let (finalCoords, finalState) = turtle((plane, coords) => plane[coords.x][coords.y] + 1, max);
+let maxSurroundingSum = (limit) => {
+  let (finalCoords, finalState) =
+    turtle(
+      (plane, coords) =>
+        max(
+          1,
+          plane[coords.x - 1][coords.y - 1]
+          + plane[coords.x - 1][coords.y]
+          + plane[coords.x - 1][coords.y + 1]
+          + plane[coords.x][coords.y + 1]
+          + plane[coords.x][coords.y - 1]
+          + plane[coords.x + 1][coords.y - 1]
+          + plane[coords.x + 1][coords.y]
+          + plane[coords.x + 1][coords.y + 1]
+        ),
+      limit
+    );
   finalState[finalCoords.x][finalCoords.y];
 };
 
