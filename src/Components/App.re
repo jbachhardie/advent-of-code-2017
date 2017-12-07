@@ -21,6 +21,8 @@ let puzzleFnTable = {
   Hashtbl.add(table, "SpreadsheetDivision", Spreadsheet.run(Spreadsheet.wholeDivisionOrZero));
   Hashtbl.add(table, "SpiralManhattan", Spiral.run(Spiral.manhattanDistance));
   Hashtbl.add(table, "SpiralAdjacentSum", Spiral.run(Spiral.maxSurroundingSum));
+  Hashtbl.add(table, "PhraseIsUnique", Passphrase.run(Passphrase.isUnique));
+  Hashtbl.add(table, "PhraseIsntAnagram", Passphrase.run(Passphrase.isNonAnagram));
   table;
 };
 
@@ -84,6 +86,12 @@ let make = (~message, _children) => {
             </option>
             <option value="SpiralAdjacentSum">
               (ReasonReact.stringToElement("3.2 Spiral Adjacent Sum"))
+            </option>
+            <option value="PhraseIsUnique">
+              (ReasonReact.stringToElement("4.1 Uniqueness Phrase Validation"))
+            </option>
+            <option value="PhraseIsntAnagram">
+              (ReasonReact.stringToElement("4.2 Anagram Phrase Validation"))
             </option>
           </select>
         </label>
