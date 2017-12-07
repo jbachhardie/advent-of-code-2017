@@ -23,6 +23,12 @@ let puzzleFnTable = {
   Hashtbl.add(table, "SpiralAdjacentSum", Spiral.run(Spiral.maxSurroundingSum));
   Hashtbl.add(table, "PhraseIsUnique", Passphrase.run(Passphrase.isUnique));
   Hashtbl.add(table, "PhraseIsntAnagram", Passphrase.run(Passphrase.isNonAnagram));
+  Hashtbl.add(table, "InstructionJumpMaze", InstructionMaze.run((x) => x + 1));
+  Hashtbl.add(
+    table,
+    "InstructionJumpMazeComplex",
+    InstructionMaze.run((x) => x > 2 ? x - 1 : x + 1)
+  );
   table;
 };
 
@@ -92,6 +98,12 @@ let make = (~message, _children) => {
             </option>
             <option value="PhraseIsntAnagram">
               (ReasonReact.stringToElement("4.2 Anagram Phrase Validation"))
+            </option>
+            <option value="InstructionJumpMaze">
+              (ReasonReact.stringToElement("5.1 Instruction Jump Maze"))
+            </option>
+            <option value="InstructionJumpMazeComplex">
+              (ReasonReact.stringToElement("5.2 Instruction Jump Maze Variant"))
             </option>
           </select>
         </label>
