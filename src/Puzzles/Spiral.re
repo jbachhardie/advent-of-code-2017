@@ -40,32 +40,48 @@ let takeStep = (stepCount, stepLimit, direction) =>
   | (true, _) => (0, stepLimit, rotateCounterClockwise(direction))
   };
 
-let turtle = (lay, max) => {
+let turtle = (layFn, max) => {
   let coords = vec(100, 100);
   let plane = Array.make_matrix(201, 201, 0);
-  let direction = ref(Right);
-  let stepCount = ref(0);
-  let stepLimit = ref(0);
-  let prev = ref(0);
-  while (prev^ < max) {
-    let newValue = lay(plane, coords, prev^);
-    plane[coords.x][coords.y] = newValue;
-    prev := newValue;
-    vectorSum(coords, stepInDirectionVector(direction^));
-    let (newStepCount, newStepLimit, newDirection) = takeStep(stepCount^, stepLimit^, direction^);
-    stepCount := newStepCount;
-    stepLimit := newStepLimit;
-    direction := newDirection;
+  let lay = () => {
+    let newVal = layFn(plane, coords);
+    plane[coords.x][coords.y] = newVal;
+    newVal;
   };
-  coords;
+  let rec takeStep = (stepCount, stepLimit, direction) =>
+    if (lay() < max) {
+      vectorSum(coords, stepInDirectionVector(direction));
+      switch (stepCount == stepLimit, direction) {
+      | (false, _) => takeStep(stepCount + 1, stepLimit, direction)
+      | (true, Up)
+      | (true, Down) => takeStep(0, stepLimit + 1, rotateCounterClockwise(direction))
+      | (true, _) => takeStep(0, stepLimit, rotateCounterClockwise(direction))
+      };
+    } else {
+      (coords, plane);
+    };
+  takeStep(0, 0, Right);
 };
 
 let cartesianManhattanDistance = (a, b) => abs(a.x - b.x) + abs(a.y - b.y);
 
-let manhattanDistance = (max) =>
-  (max - 1)
-  |> turtle((_, _, prev) => prev + 1)
-  |> cartesianManhattanDistance(vec(100, 100));
+let manhattanDistance = (max) => {
+  let i = ref(0);
+  let (finalCoords, _finalState) =
+    turtle(
+      (_, _) => {
+        i := i^ + 1;
+        i^;
+      },
+      max
+    );
+  cartesianManhattanDistance(vec(100, 100), finalCoords);
+};
+
+let maxSurroundingSum = (max) => {
+  let (finalCoords, finalState) = turtle((plane, coords) => plane[coords.x][coords.y] + 1, max);
+  finalState[finalCoords.x][finalCoords.y];
+};
 
 let run = (fn, input) =>
   switch (input |> int_of_string) {
